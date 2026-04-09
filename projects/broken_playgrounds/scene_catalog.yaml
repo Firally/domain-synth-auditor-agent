@@ -1,0 +1,120 @@
+# Scene Catalog — Broken Playgrounds Domain
+# Канонические сцены для генерации синтетических изображений сломанных детских площадок
+
+scenes:
+  - id: scene_01_slide_front
+    name: "Сломанная горка — фронтальный вид"
+    zone: slide_zone
+    camera_view: front
+    description: >
+      Фронтальный вид на детскую горку с видимыми повреждениями:
+      трещины на скате, ржавчина на поручнях, облупившаяся краска.
+      Двор многоэтажного жилого дома на заднем плане.
+    must_have:
+      - slide_structure (с видимыми повреждениями)
+      - ground_surface (резиновое покрытие или песок)
+      - residential_buildings_background
+    optional:
+      - rust_on_metal_parts
+      - cracked_plastic_surface
+      - peeling_paint
+      - missing_handrail_section
+    forbidden:
+      - people
+      - children
+      - indoor_elements
+
+  - id: scene_02_swing_corner
+    name: "Качели — угловой вид"
+    zone: swing_zone
+    camera_view: corner
+    description: >
+      Качели с погнутой рамой или порванным сиденьем, снятые под углом.
+      Видна опорная конструкция с ржавчиной и деформацией.
+    must_have:
+      - swing_frame (металлическая конструкция)
+      - damaged_seat_or_chain (порванное/сломанное сиденье или цепь)
+      - ground_surface
+    optional:
+      - rust_on_frame
+      - bent_metal_parts
+      - worn_rubber_surfacing
+    forbidden:
+      - people
+      - children
+
+  - id: scene_03_climbing_wide
+    name: "Лазалка — общий вид"
+    zone: climbing_zone
+    camera_view: wide
+    description: >
+      Широкий план повреждённого лазательного комплекса.
+      Сломанные перекладины, отсутствующие элементы, ржавчина.
+    must_have:
+      - climbing_structure (турник, лесенка или рукоход)
+      - visible_damage (сломанные/отсутствующие перекладины)
+      - outdoor_residential_setting
+    optional:
+      - missing_rungs
+      - broken_joints
+      - graffiti_on_structure
+    forbidden:
+      - people
+      - children
+
+  - id: scene_04_sandbox_front
+    name: "Песочница — фронтальный вид"
+    zone: sandbox
+    camera_view: front
+    description: >
+      Заброшенная или сломанная песочница. Сломанные бортики,
+      грязный/замусоренный песок, возможно отсутствующие доски.
+    must_have:
+      - sandbox_frame (деревянный или пластиковый бортик)
+      - visible_damage (сломанные доски, трещины)
+      - sand_or_ground
+    optional:
+      - litter_in_sand
+      - broken_boards
+      - faded_paint
+      - overgrown_weeds
+    forbidden:
+      - people
+      - children
+
+  - id: scene_05_general_wide
+    name: "Общий вид площадки — широкий угол"
+    zone: general_overview
+    camera_view: wide
+    description: >
+      Широкий план всей детской площадки с несколькими элементами.
+      Общее впечатление запущенности и износа.
+    must_have:
+      - multiple_play_elements (2+ элемента)
+      - visible_wear_and_damage
+      - residential_courtyard_setting
+    optional:
+      - overgrown_vegetation
+      - faded_colors
+      - broken_fence_or_border
+    forbidden:
+      - people
+      - children
+
+  - id: scene_06_detail_close
+    name: "Крупный план повреждения"
+    zone: slide_zone
+    camera_view: close
+    description: >
+      Макросъёмка конкретного повреждения: трещина в пластике,
+      ржавый болт, сломанный край, облупившаяся краска.
+    must_have:
+      - specific_damage_detail (трещина, ржавчина, слом)
+      - playground_equipment_context (видно, что это часть оборудования)
+    optional:
+      - sharp_edges_exposed
+      - rust_closeup
+      - splintered_wood
+    forbidden:
+      - people
+      - children

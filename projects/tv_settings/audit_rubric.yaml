@@ -1,0 +1,44 @@
+# Audit Rubric — TV Settings Domain
+# Адаптированные чеки для проверки замены контента ТВ-экрана
+
+audit_checks:
+  - id: safety_pii
+    name: "Safety & PII check"
+    type: hybrid
+    description: "Проверка на людей, PII, неприемлемый контент"
+    thresholds:
+      accept: 1.0
+      review: 1.0
+    hard_reject: true
+
+  - id: prompt_adherence
+    name: "Edit instruction adherence"
+    type: vlm
+    description: "Насколько результат соответствует инструкции редактирования"
+    thresholds:
+      accept: 0.70
+      review: 0.50
+
+  - id: domain_relevance
+    name: "Settings menu presence"
+    type: hybrid
+    description: "На экране ТВ отображается меню настроек, а не реклама"
+    thresholds:
+      accept: 0.75
+      review: 0.55
+
+  - id: technical_quality
+    name: "Technical quality"
+    type: rule_based
+    description: "Разрешение, резкость, экспозиция, артефакты"
+    thresholds:
+      accept: 0.70
+      review: 0.50
+
+aggregation:
+  step_2_check_scores:
+    weights:
+      prompt_adherence: 0.25
+      domain_relevance: 0.40
+      technical_quality: 0.20
+      object_integration: 0.15

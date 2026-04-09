@@ -1,0 +1,145 @@
+# Scene Catalog — WB ПВЗ Domain
+# Канонические сцены для генерации синтетических изображений
+# Каждая сцена = один тип кадра, который система должна уметь воспроизводить
+
+scenes:
+  - id: scene_01_counter_front
+    name: "Зона выдачи — фронтальный вид"
+    zone: counter
+    camera_view: front
+    description: >
+      Прямой вид на стойку выдачи заказов. Один или два белых прилавка
+      в центре кадра, за ними — стена с WB-муралом или ролл-ап постером.
+      Яркое верхнее освещение. Без людей.
+    must_have:
+      - white_counter_unit (1-2 шт.)
+      - wb_brand_element (мурал или постер на стене за стойкой)
+      - overhead_lighting (LED полоса или трековый светильник)
+    optional:
+      - scissors_or_pen_on_counter
+      - info_sheet_on_wall
+      - lavender_plant_on_counter
+    forbidden:
+      - people
+      - foreign_brand_logos
+      - outdoor_elements
+    floor_variants: [light_grey_tile, light_wood_look_tile, beige_tile]
+    ceiling_variants: [drop_tile, open_metal_grid, flat_white]
+    reference_images: [88e890fe, 32858040]
+
+  - id: scene_02_counter_corner
+    name: "Зона выдачи — угловой вид"
+    zone: counter
+    camera_view: corner
+    description: >
+      Угловой ракурс на зону выдачи. Видны два прилавка под углом,
+      боковая стена и фронтальная стена с брендингом. Глубина пространства.
+    must_have:
+      - white_counter_units_x2
+      - wb_brand_wall_mural (фиолетовый фон, характерный стиль)
+      - overhead_lighting
+    optional:
+      - wb_branded_mat_on_counter
+      - cctv_camera_in_corner
+      - cardboard_boxes_under_counter
+      - stickers_on_counter
+    forbidden:
+      - people
+      - foreign_brand_logos
+    floor_variants: [light_grey_tile, beige_tile, dark_laminate]
+    ceiling_variants: [drop_tile, flat_white]
+    reference_images: [04a5c833]
+
+  - id: scene_03_fitting_room_front
+    name: "Примерочные — фронтальный вид"
+    zone: fitting_room
+    camera_view: front
+    description: >
+      Прямой вид на 2-3 примерочные кабины. Белые MDF-рамы, серые шторы,
+      белые деревянные скамейки. Зеркало внутри одной из кабин.
+    must_have:
+      - fitting_room_stalls (2-3 шт., белые рамы, серые шторы)
+      - bench_inside_stall (белая деревянная или серая мягкая)
+      - mirror_inside_or_adjacent
+    optional:
+      - wb_brand_element_on_adjacent_wall
+      - decorative_garland_over_frame
+      - pompom_ceiling_decor
+    forbidden:
+      - people
+      - open_curtains_with_interior_visible (не должно быть раздетых людей или личных вещей)
+    floor_variants: [light_grey_tile, light_wood_look_tile]
+    ceiling_variants: [open_metal_grid, flat_white]
+    reference_images: [134c634d, 14e5e4fc]
+
+  - id: scene_04_brand_wall_wide
+    name: "Брендовая стена — широкий план"
+    zone: brand_wall
+    camera_view: wide
+    description: >
+      Фиолетовая стена с большим WB-муралом в полный рост стены.
+      Характерные элементы: "wb" в надувном/3D стиле, "-30%", цветные шары,
+      яркий фиолетово-розовый фон. Перед стеной — элементы зоны выдачи.
+    must_have:
+      - large_wb_mural (фиолетовый фон, wb-логотип 3D, -30%, шары)
+      - bright_overhead_lighting
+    optional:
+      - white_counter_in_foreground
+      - full_length_mirror_on_stand
+      - lavender_or_plant_accent
+    forbidden:
+      - people
+      - foreign_brand_logos
+      - competitor_content
+    floor_variants: [light_grey_tile, dark_grey_tile, beige_tile]
+    ceiling_variants: [flat_white, open_metal_grid]
+    reference_images: [63505c31, 84c5f288, 6abffa03]
+
+  - id: scene_05_general_wide
+    name: "Общий вид зала — широкий угол"
+    zone: general_overview
+    camera_view: wide_angle
+    description: >
+      Широкий план всего помещения ПВЗ: стойка выдачи на переднем плане,
+      брендинг на стенах, зона ожидания, возможно примерочные в глубине.
+      Светлое, просторное помещение.
+    must_have:
+      - counter_zone_visible
+      - wb_brand_element_on_wall (постер или мурал)
+      - overhead_lighting
+    optional:
+      - waiting_bench
+      - window_with_natural_light
+      - plants
+      - pompom_ceiling_decor
+      - fitting_room_zone_in_background
+    forbidden:
+      - people
+      - foreign_brand_logos
+      - outdoor_scene
+    floor_variants: [light_grey_tile, beige_tile]
+    ceiling_variants: [open_metal_grid, flat_white]
+    reference_images: [5e1ddba6, 9360bafd]
+
+  - id: scene_06_storage_glimpse
+    name: "Склад за шторкой — видна зона хранения"
+    zone: counter_plus_storage
+    camera_view: front
+    description: >
+      Зона выдачи на переднем плане, а сквозь проём или тёмную штору
+      видны металлические стеллажи с посылками/пакетами.
+      Ощущение "рабочего" пространства за публичной зоной.
+    must_have:
+      - white_counter_unit (foreground)
+      - dark_curtain_or_opening_to_storage
+      - metal_shelving_with_packages (visible in background)
+    optional:
+      - wb_brand_mural_on_wall
+      - tv_monitor_on_wall
+      - lavender_plant
+    forbidden:
+      - people
+      - exposed_personal_data_on_packages (трек-номера крупным планом)
+    floor_variants: [light_grey_tile]
+    ceiling_variants: [open_metal_grid]
+    reference_images: [6abffa03, 84c5f288]

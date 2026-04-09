@@ -1,0 +1,176 @@
+# Golden Set для оценки IntentResolver
+#
+# Оценивает, насколько точно LLM:
+#   1. Выбирает правильный object_type из списка доступных
+#   2. Извлекает количество изображений из текста
+#   3. Корректно обрабатывает несуществующие типы (null)
+#
+# MySQL НЕ НУЖНА — object_types подаются как in-memory list.
+# Запуск: python scripts/run_intent_evals.py --verbose
+
+# Фиксированный набор типов объектов для всех тестов
+object_types:
+  - id: 1
+    object_type: tv_screen
+    description: "Телевизор или монитор с экраном, на котором отображается контент"
+  - id: 2
+    object_type: wb_counter
+    description: "Стойка выдачи заказов в ПВЗ Wildberries"
+  - id: 3
+    object_type: fitting_room
+    description: "Примерочная кабина с зеркалом и шторой"
+  - id: 4
+    object_type: brand_wall
+    description: "Стена с брендированными элементами и логотипами Wildberries"
+
+# Тестовые кейсы
+cases:
+  # ================================================================
+  # Категория: direct_match — прямое название типа в запросе
+  # ================================================================
+
+  - id: intent_001
+    request: "Сделай из телевизоров картинки с экранами настроек, 10 штук"
+    expected_type: tv_screen
+    expected_count: 10
+    category: direct_match
+    notes: "Прямое упоминание телевизоров + точное число"
+
+  - id: intent_002
+    request: "Мне нужно 5 фотографий стоек выдачи с новым дизайном"
+    expected_type: wb_counter
+    expected_count: 5
+    category: direct_match
+    notes: "Стойка выдачи → wb_counter"
+
+  - id: intent_003
+    request: "Сгенерируй 8 картинок примерочных кабин с обновлёнными шторами"
+    expected_type: fitting_room
+    expected_count: 8
+    category: direct_match
+    notes: "Примерочные кабины → fitting_room"
+
+  - id: intent_004
+    request: "Обнови 12 фотографий брендовой стены с новыми логотипами"
+    expected_type: brand_wall
+    expected_count: 12
+    category: direct_match
+    notes: "Брендовая стена → brand_wall"
+
+  # ================================================================
+  # Категория: synonym — синонимы и перифразы
+  # ================================================================
+
+  - id: intent_005
+    request: "Замени контент на мониторах, нужно 3 картинки"
+    expected_type: tv_screen
+    expected_count: 3
+    category: synonym
+    notes: "Мониторы = телевизоры → tv_screen"
+
+  - id: intent_006
+    request: "Обработай экраны телевизоров, штук 20"
+    expected_type: tv_screen
+    expected_count: 20
+    category: synonym
+    notes: "Экраны телевизоров → tv_screen, разговорный стиль числа"
+
+  - id: intent_007
+    request: "Нужны новые фото зоны выдачи, 15 изображений"
+    expected_type: wb_counter
+    expected_count: 15
+    category: synonym
+    notes: "Зона выдачи → wb_counter"
+
+  - id: intent_008
+    request: "Сделай картинки примерочных с зеркалами, 6 штук"
+    expected_type: fitting_room
+    expected_count: 6
+    category: synonym
+    notes: "Примерочные с зеркалами → fitting_room"
+
+  # ================================================================
+  # Категория: english — запросы на английском
+  # ================================================================
+
+  - id: intent_009
+    request: "Generate 7 images of pickup point counters with updated branding"
+    expected_type: wb_counter
+    expected_count: 7
+    category: english
+    notes: "Pickup point counters → wb_counter"
+
+  - id: intent_010
+    request: "I need 4 TV screen photos with settings menu instead of ads"
+    expected_type: tv_screen
+    expected_count: 4
+    category: english
+    notes: "TV screen → tv_screen, English request"
+
+  # ================================================================
+  # Категория: no_count — без указания количества (ожидаем default=10)
+  # ================================================================
+
+  - id: intent_011
+    request: "Нужны картинки примерочных с новыми шторами"
+    expected_type: fitting_room
+    expected_count: 10
+    category: no_count
+    notes: "Нет числа → default 10"
+
+  - id: intent_012
+    request: "Обнови фотографии стоек выдачи"
+    expected_type: wb_counter
+    expected_count: 10
+    category: no_count
+    notes: "Нет числа → default 10"
+
+  # ================================================================
+  # Категория: no_match — несуществующий тип (ожидаем null)
+  # ================================================================
+
+  - id: intent_013
+    request: "Сделай картинки кофемашин в офисе"
+    expected_type: null
+    expected_count: 10
+    category: no_match
+    notes: "Кофемашины нет в списке типов → null"
+
+  - id: intent_014
+    request: "Мне нужно 5 фотографий парковки"
+    expected_type: null
+    expected_count: 5
+    category: no_match
+    notes: "Парковка нет в списке типов → null"
+
+  # ================================================================
+  # Категория: ambiguous — неоднозначные или сложные запросы
+  # ================================================================
+
+  - id: intent_015
+    request: "Обнови фотки в зоне ТВ, штук 10"
+    expected_type: tv_screen
+    expected_count: 10
+    category: ambiguous
+    notes: "Зона ТВ → tv_screen (неформальный стиль)"
+
+  - id: intent_016
+    request: "Замени рекламу на дисплеях, 25 картинок"
+    expected_type: tv_screen
+    expected_count: 25
+    category: ambiguous
+    notes: "Дисплеи/реклама → tv_screen"
+
+  - id: intent_017
+    request: "Сделай красивые фото WB-стенда с логотипами, 9 штук"
+    expected_type: brand_wall
+    expected_count: 9
+    category: ambiguous
+    notes: "WB-стенд с логотипами → brand_wall"
+
+  - id: intent_018
+    request: "Нужны изображения для ПВЗ — зона выдачи, 30 штук"
+    expected_type: wb_counter
+    expected_count: 30
+    category: ambiguous
+    notes: "Зона выдачи ПВЗ → wb_counter"

@@ -60,3 +60,107 @@ PoC агентной системы для автоматизации контр
 - Не гарантирует улучшение downstream-метрик моделей (это опциональная проверка).
 - Не заменяет ручную проверку полностью: human-in-the-loop остаётся частью процесса.
 - Не обеспечивает промышленную безопасность — только базовые политики safety/PII и безопасного запуска инструментов.
+
+---
+
+## Quick Start
+
+### Требования
+
+- Python 3.11+
+- API-ключ [OpenRouter](https://openrouter.ai/keys) (для VLM и генерации изображений)
+- MySQL (опционально — только для `--source db`)
+
+### Установка
+
+```bash
+# Клонировать репозиторий
+git clone https://github.com/<your-username>/domain-synth-auditor-agent.git
+cd domain-synth-auditor-agent
+
+# Создать виртуальное окружение и установить зависимости
+python -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+
+# Настроить переменные окружения
+cp .env.example .env
+# Заполнить OPENROUTER_API_KEY в .env
+```
+
+### Запуск
+
+**Smoke test** — проверка подключения и e2e пайплайна на одном изображении:
+
+```bash
+# Только проверка подключения к API
+python scripts/smoke_test.py --connectivity-only
+
+# Полный smoke test (генерация + аудит + решение)
+python scripts/smoke_test.py --project wb_pvz
+```
+
+**Batch processing** — обработка пакета изображений из CSV:
+
+```bash
+python scripts/run_batch.py \
+  --csv data.csv \
+  --project tv_settings \
+  --limit 5
+```
+
+**Batch processing из MySQL** (требуется настроенная БД):
+
+```bash
+# Инициализировать схему БД
+mysql -u root < scripts/init_db.sql
+
+# Запуск с natural language запросом
+python scripts/run_batch.py \
+  --source db \
+  --project tv_settings \
+  --request "Сделай 10 картинок телевизоров с экранами настроек"
+```
+
+**Evals** — запуск evaluation на golden set:
+
+```bash
+# Аудит-eval (agreement с human labels)
+python scripts/run_evals.py --verbose
+
+# IntentResolver eval (точность определения типа объекта)
+python scripts/run_intent_evals.py
+```
+
+### Структура проекта
+
+```
+src/auditor/          # Ядро системы
+  pipeline.py         # DVF-петля: Draft → Verify → Fix
+  audit_stage.py      # VLM-аудит изображения
+  decision_engine.py  # ACCEPT / REJECT / NEEDS_REVIEW
+  model_gateway.py    # Обёртка над OpenRouter API
+  prompt_builder.py   # Генерация промптов из domain spec
+  prompt_improver.py  # LLM-улучшение промпта на Fix-шаге
+  knowledge_base.py   # Retrieval из reference annotations
+  memory_store.py     # Межитерационная память агента
+  intent_resolver.py  # NL-запрос → тип объекта из БД
+  db_loader.py        # MySQL: загрузка изображений по типу
+  image_loader.py     # CSV: загрузка изображений по URL
+  domain_spec.py      # Парсинг domain.yaml
+  config.py           # Конфигурация (env vars)
+  experiment_store.py # Сохранение артефактов прогонов
+
+scripts/              # Точки входа
+projects/             # Доменные конфигурации (domain.yaml + каталоги)
+evals/                # Golden sets для evaluation
+docs/                 # Архитектура, спеки, диаграммы
+```
+
+### Доменные проекты
+
+Каждый проект в `projects/` содержит `domain.yaml` с конфигурацией домена.
+Готовые примеры:
+- `wb_pvz` — ПВЗ (генерация сцен)
+- `tv_settings` — замена контента на экранах ТВ (edit mode)
+- `broken_playgrounds` — детекция повреждений на детских площадках

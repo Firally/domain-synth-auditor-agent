@@ -1,0 +1,4 @@
+# Object Catalog — TV Settings Domain (stub for edit mode)
+# В edit mode объекты не добавляются — мы редактируем существующие изображения.
+
+objects: []

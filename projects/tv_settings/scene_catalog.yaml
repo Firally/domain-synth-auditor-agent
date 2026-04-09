@@ -1,0 +1,17 @@
+# Scene Catalog — TV Settings Domain (stub for edit mode)
+# В edit mode сцены не генерируются с нуля, а редактируются из исходных фото.
+# Этот файл — минимальный stub для совместимости с DomainSpec.load().
+
+scenes:
+  - id: tv_edit_default
+    name: "TV screen edit — замена контента экрана"
+    zone: tv_screen
+    camera_view: front
+    description: >
+      Исходная фотография ТВ-экрана в интерьере ПВЗ.
+      Контент на экране будет заменён на меню настроек.
+    must_have: []
+    optional: []
+    forbidden:
+      - advertisement_on_screen
+      - promotional_content

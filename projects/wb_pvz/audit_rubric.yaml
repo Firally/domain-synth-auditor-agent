@@ -1,0 +1,179 @@
+# Audit Rubric — WB ПВЗ Domain
+# Правила оценки сгенерированных изображений
+# Каждая проверка: тип (vlm | rule_based | hybrid), скор [0.0-1.0], пороги
+
+audit_checks:
+
+  # ─── 1. PROMPT ADHERENCE ───────────────────────────────────────────────────
+  - id: prompt_adherence
+    name: "Соответствие промпту"
+    type: vlm
+    description: >
+      VLM оценивает, насколько изображение соответствует текстовому описанию
+      (zone, must_have, optional_objects). Спрашиваем явно по каждому элементу.
+    vlm_questions:
+      - "Is the scene an interior of a Wildberries pickup point? (yes/no)"
+      - "Is the specified zone ({zone}) clearly visible? (yes/partially/no)"
+      - "Are the following required elements present: {must_have}? List which are missing."
+      - "Is the added object ({object_id}) visible and naturally placed in the scene? (yes/partially/no)"
+    scoring:
+      zone_present: 0.3
+      must_have_all: 0.4
+      object_visible_and_natural: 0.3
+    thresholds:
+      accept: 0.75
+      review: 0.50
+      reject: <0.50
+
+  # ─── 2. DOMAIN RELEVANCE ───────────────────────────────────────────────────
+  - id: domain_relevance
+    name: "Доменная релевантность WB ПВЗ"
+    type: hybrid
+    description: >
+      Проверяем, что сцена выглядит как ПВЗ Wildberries, а не как офис,
+      квартира, склад с паллетами, супермаркет или другая торговая точка.
+    rule_checks:
+      - check: wb_brand_element_present
+        weight: 0.35
+        method: "VLM: Is there a Wildberries brand element (mural, poster, logo, branded bag)?"
+      - check: white_furniture_present
+        weight: 0.20
+        method: "VLM: Is white retail furniture (counter, desk, shelving unit) present?"
+      - check: indoor_retail_aesthetic
+        weight: 0.25
+        method: "VLM: Does the scene look like an indoor retail pickup/delivery point?"
+      - check: no_forbidden_zone_type
+        weight: 0.20
+        method: "VLM: Is this scene free of: open-air setting, supermarket, office, apartment?"
+    thresholds:
+      accept: 0.75
+      review: 0.55
+      reject: <0.55
+
+  # ─── 3. TECHNICAL QUALITY ──────────────────────────────────────────────────
+  - id: technical_quality
+    name: "Техническое качество изображения"
+    type: rule_based
+    description: >
+      Проверяем базовые технические характеристики изображения.
+      Используем rule-based метрики (без VLM).
+    checks:
+      - check: resolution_ok
+        method: "pixel dimensions >= 512x512"
+        weight: 0.20
+      - check: not_blurry
+        method: "Laplacian variance > threshold (e.g. 100)"
+        weight: 0.30
+      - check: exposure_ok
+        method: "mean brightness: 40-220 (не пересвет, не темнота)"
+        weight: 0.20
+      - check: no_obvious_artifacts
+        method: "VLM: Are there obvious AI generation artifacts (extra limbs, warped text, fused objects)?"
+        weight: 0.30
+    thresholds:
+      accept: 0.70
+      review: 0.50
+      reject: <0.50
+
+  # ─── 4. SAFETY / PII CHECK ─────────────────────────────────────────────────
+  - id: safety_pii
+    name: "Безопасность и PII"
+    type: hybrid
+    description: >
+      Жёсткие правила — любое срабатывание ведёт к немедленному REJECT
+      (не зависит от других скоров).
+    hard_reject_rules:
+      - id: no_people
+        description: "Люди, лица, части тел в кадре"
+        method: "VLM: Are there any people, faces, or human body parts visible?"
+        action: REJECT
+
+      - id: no_pii_documents
+        description: "Документы, паспорта, удостоверения с личными данными"
+        method: "VLM: Are there any identity documents or papers with personal data visible?"
+        action: REJECT
+
+      - id: no_tracking_labels_closeup
+        description: "Трек-номера посылок крупным планом (читаемые)"
+        method: "VLM: Are there any readable shipping labels or tracking numbers visible?"
+        action: REJECT
+
+      - id: no_qr_codes_closeup
+        description: "QR-коды крупным планом (читаемые)"
+        method: "rule: detect QR-code-like patterns in center of image at high resolution"
+        action: REJECT
+
+      - id: no_phones_screens
+        description: "Экраны телефонов с личными данными"
+        method: "VLM: Are there any phone screens with personal data or messages visible?"
+        action: REJECT
+
+      - id: no_nsfw
+        description: "NSFW контент"
+        method: "safety classifier"
+        action: REJECT
+
+      - id: no_foreign_brands
+        description: "Логотипы конкурентов или посторонних брендов"
+        method: "VLM: Are there any competitor brand logos or non-WB brand marks visible?"
+        action: REJECT
+
+    scoring_note: >
+      safety_pii не имеет числового скора: любой hard_reject = автоматический REJECT
+      всего изображения, остальные проверки не считаются.
+
+  # ─── 5. OBJECT INTEGRATION CHECK ───────────────────────────────────────────
+  - id: object_integration
+    name: "Качество интеграции добавленного объекта"
+    type: vlm
+    description: >
+      Только если в задаче был добавляемый объект. Проверяем, что объект
+      выглядит органично, а не "наклеен" поверх сцены.
+    vlm_questions:
+      - "Is the {object_name} visible in the image? (yes/no)"
+      - "Does the {object_name} look naturally placed and correctly scaled? (yes/partially/no)"
+      - "Is the lighting on the {object_name} consistent with the rest of the scene? (yes/partially/no)"
+      - "Does the {object_name} look like an AI artifact or is it realistic? (realistic/artifact)"
+    scoring:
+      object_visible: 0.30
+      natural_placement: 0.35
+      lighting_consistent: 0.20
+      not_artifact: 0.15
+    thresholds:
+      accept: 0.70
+      review: 0.45
+      reject: <0.45
+    skip_if: "no object was specified in the task"
+
+# ─── AGGREGATION POLICY ────────────────────────────────────────────────────
+aggregation:
+  description: >
+    Rule-based агрегация скоров. LLM НЕ принимает финальное решение.
+
+  step_1_hard_reject:
+    description: "Сначала проверяем safety_pii. Любой hard_reject → REJECT (стоп)."
+
+  step_2_check_scores:
+    weights:
+      prompt_adherence: 0.30
+      domain_relevance: 0.30
+      technical_quality: 0.20
+      object_integration: 0.20  # 0 если объект не задан, перераспределяем веса
+
+  step_3_decision:
+    ACCEPT:
+      condition: "weighted_score >= 0.72 AND technical_quality.score >= 0.60 AND domain_relevance.score >= 0.65"
+    NEEDS_REVIEW:
+      condition: "0.50 <= weighted_score < 0.72 OR any single check in review zone"
+    REJECT:
+      condition: "weighted_score < 0.50 OR any hard_reject OR technical_quality.score < 0.50"
+
+  step_4_explanation:
+    description: >
+      Для каждого решения генерируем строку-объяснение:
+      список провалившихся проверок + их скоры + рекомендации для prompt improver.
+    format: >
+      decision: REJECT
+      reasons: ["domain_relevance.wb_brand_element_present: 0.0 — no WB branding visible",
+                "technical_quality.not_blurry: 0.3 — image too blurry"]
+      suggestions: ["Add explicit WB mural or poster to prompt", "Request higher detail level"]

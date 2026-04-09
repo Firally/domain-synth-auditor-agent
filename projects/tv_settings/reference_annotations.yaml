@@ -1,0 +1,5 @@
+# Reference Annotations — TV Settings Domain
+# Пока пустой (нет reference изображений для этого домена).
+# KB будет работать в degraded mode (без few-shot примеров).
+
+references: []

@@ -1,0 +1,210 @@
+# Object Catalog — WB ПВЗ Domain
+# Объекты, которые можно добавлять в сцену при генерации
+# allowed_zones: в каких сценах объект физически уместен
+# placement: куда именно помещается
+# size_hint: относительный размер в кадре
+
+objects:
+
+  # --- БРЕНДИНГ / ПОЛИГРАФИЯ ---
+
+  - id: wb_rollup_poster
+    name: "WB ролл-ап постер"
+    category: branding
+    description: >
+      Вертикальный постер на стойке-ролл-ап. Фон: розовый с фиолетовыми кругами.
+      Логотип "wb" белым шрифтом. Размер ~60×160 см.
+    allowed_zones: [counter, general_overview, counter_plus_waiting]
+    placement: wall_adjacent_to_counter
+    size_hint: large
+    color_palette: [pink_magenta, purple, white]
+    reference_seen_in: [88e890fe, 9360bafd, 5e1ddba6]
+
+  - id: wb_sticker_set
+    name: "Стикеры WB на мебели"
+    category: branding
+    description: >
+      Небольшие декоративные стикеры на поверхности прилавка или корпусе мебели.
+      Могут быть с персонажами WB, логотипом, сезонными элементами.
+    allowed_zones: [counter, counter_corner]
+    placement: counter_surface_or_side_panel
+    size_hint: small
+    reference_seen_in: [04a5c833, 8fb6c8a8]
+
+  - id: wb_info_sheet
+    name: "Информационный лист на стене"
+    category: branding
+    description: >
+      Лист A4/A3 с инструкцией "Как проверить товар перед получением",
+      иконки, WB логотип, текст. Крепится на стену над прилавком.
+    allowed_zones: [counter, counter_front]
+    placement: wall_above_counter
+    size_hint: small
+    reference_seen_in: [88e890fe, 32858040]
+
+  - id: floor_banner_wb
+    name: "Напольный баннер/коврик WB"
+    category: branding
+    description: >
+      Прямоугольный брендированный коврик на полу у входа или перед стойкой.
+      Цвет: фиолетово-розовый с WB-паттерном или логотипом.
+    allowed_zones: [general_overview, counter_front, counter_corner]
+    placement: floor_in_front_of_counter_or_entrance
+    size_hint: medium
+    reference_seen_in: [8fb6c8a8]
+
+  - id: wb_branded_mat_on_counter
+    name: "WB-брендированная салфетка/мат на прилавке"
+    category: branding
+    description: >
+      Фиолетово-розовый тканевый мат с WB-паттерном на поверхности стола.
+    allowed_zones: [counter, counter_front, counter_corner]
+    placement: counter_top_surface
+    size_hint: medium
+    reference_seen_in: [04a5c833]
+
+  - id: promo_sticker_wall
+    name: "Промо-стикер на стене"
+    category: branding
+    description: >
+      Круглый или прямоугольный информационный стикер на стене или мебели.
+      Например: "Проверяйте товары под камерой", "Частями".
+    allowed_zones: [counter, counter_front, counter_corner]
+    placement: counter_front_panel_or_wall
+    size_hint: small
+    reference_seen_in: [04a5c833]
+
+  # --- ДЕКОР ---
+
+  - id: pompom_ceiling_decor
+    name: "Бумажные помпоны на потолке"
+    category: decor
+    description: >
+      Воздушные бумажные шары-помпоны разного размера, подвешенные к потолку.
+      Цвета: розовый, фиолетовый, белый. Диаметр 20-40 см.
+    allowed_zones: [general_overview, fitting_room, counter_plus_waiting]
+    placement: ceiling_hanging
+    size_hint: medium
+    reference_seen_in: [134c634d, 5e1ddba6, 9360bafd]
+
+  - id: flower_garland
+    name: "Гирлянда из листьев и цветов"
+    category: decor
+    description: >
+      Искусственная или живая гирлянда из зелёных листьев и белых цветов.
+      Вешается поверх рамы примерочной или вдоль стены.
+    allowed_zones: [fitting_room]
+    placement: top_of_fitting_room_frame
+    size_hint: medium
+    reference_seen_in: [134c634d]
+
+  - id: indoor_plant_large
+    name: "Крупное комнатное растение"
+    category: decor
+    description: >
+      Высокое пальмообразное или драцена-подобное растение в напольном горшке.
+      Высота 100-180 см. Добавляет "живость" пространству.
+    allowed_zones: [general_overview, counter_plus_waiting]
+    placement: floor_corner_or_wall_side
+    size_hint: large
+    reference_seen_in: [5e1ddba6, 9360bafd]
+
+  - id: lavender_plant_on_counter
+    name: "Искусственная лаванда на прилавке"
+    category: decor
+    description: >
+      Небольшой горшок с декоративной лавандой (чаще искусственной, фиолетовой).
+      Ставится в нишу прилавка или рядом с ним.
+    allowed_zones: [counter, counter_front, counter_plus_storage]
+    placement: counter_shelf_or_top
+    size_hint: small
+    reference_seen_in: [32858040, 6abffa03, 84c5f288]
+
+  - id: orchid_plant
+    name: "Орхидея"
+    category: decor
+    description: >
+      Живая или искусственная орхидея в горшке. Розовые или белые соцветия.
+      Обычно стоит на подоконнике или на электрощите/полке.
+    allowed_zones: [counter, counter_front]
+    placement: wall_shelf_or_windowsill
+    size_hint: small
+    reference_seen_in: [32858040, 88e890fe]
+
+  - id: seasonal_christmas_decor
+    name: "Сезонный декор: новогодняя ёлка"
+    category: decor_seasonal
+    description: >
+      Небольшая новогодняя ёлка (60-120 см) с гирляндой и игрушками.
+      Ставится на пол рядом со стойкой или у стены.
+    allowed_zones: [counter, counter_plus_storage, general_overview]
+    placement: floor_corner
+    size_hint: medium
+    reference_seen_in: [6abffa03, 84c5f288]
+
+  - id: window_garland
+    name: "Гирлянда на окне"
+    category: decor
+    description: >
+      Лёгкая декоративная гирлянда из цветков или бумажных элементов,
+      свисающая вертикально вдоль оконного проёма.
+    allowed_zones: [general_overview, counter_plus_waiting]
+    placement: window_frame_vertical
+    size_hint: small
+    reference_seen_in: [5e1ddba6, 9360bafd]
+
+  # --- ОБОРУДОВАНИЕ ---
+
+  - id: tv_monitor_wall
+    name: "Телевизор/монитор на стене"
+    category: equipment
+    description: >
+      Плоский TV-экран на кронштейне на стене. Обычно выключен или показывает
+      контент WB. Крепится на брендированной стене.
+    allowed_zones: [counter_plus_storage, general_overview]
+    placement: wall_mounted_above_counter_level
+    size_hint: large
+    reference_seen_in: [6abffa03, 84c5f288]
+
+  - id: full_length_mirror
+    name: "Зеркало в полный рост на подставке"
+    category: equipment
+    description: >
+      Напольное зеркало в белой раме на подставке. Высота ~170-180 см.
+      Стоит у стены или рядом со стойкой выдачи.
+    allowed_zones: [counter, brand_wall, general_overview]
+    placement: floor_against_wall_or_freestanding
+    size_hint: large
+    reference_seen_in: [63505c31]
+
+  - id: entrance_mat_black
+    name: "Входной коврик чёрный"
+    category: equipment
+    description: >
+      Чёрный резиновый/ворсовый коврик у входа или перед стойкой.
+      Прямоугольный, стандартный размер.
+    allowed_zones: [general_overview, counter_front]
+    placement: floor_entrance_or_counter_approach
+    size_hint: medium
+    reference_seen_in: [8fb6c8a8]
+
+  - id: fire_extinguisher
+    name: "Огнетушитель"
+    category: equipment
+    description: >
+      Красный огнетушитель на настенном кронштейне. Обязательный элемент
+      для помещений. Может присутствовать в углу зоны выдачи.
+    allowed_zones: [counter, general_overview]
+    placement: wall_corner_floor_level
+    size_hint: small
+    reference_seen_in: [8fb6c8a8]
+
+# --- ПРАВИЛА СОВМЕСТИМОСТИ ---
+compatibility_rules:
+  - rule: "Не более 2 добавляемых объектов за одну итерацию"
+  - rule: "Объект должен соответствовать allowed_zones сцены"
+  - rule: "seasonal_christmas_decor: только при сезонном задании"
+  - rule: "Стикеры и баннеры с текстом: не требовать читаемости мелкого текста (слабое место image-моделей)"
+  - rule: "tv_monitor_wall: экран должен быть тёмным или слегка засвеченным, не требовать чёткого контента"
+  - rule: "people: запрещены во всех сценах"
+  - rule: "foreign_brand_logos: запрещены во всех сценах"

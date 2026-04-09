@@ -1,6 +1,9 @@
 .env
 
-# Артефакты runs
+# Claude Code (worktrees, archived files)
+.claude/
+
+# Артефакты runs (могут быть большими и содержать изображения)
 runs/
 
 # Персистентная память агента

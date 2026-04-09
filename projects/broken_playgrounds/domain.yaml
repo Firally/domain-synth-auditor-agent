@@ -1,0 +1,130 @@
+# Domain Configuration — Broken Playgrounds
+# Пример второго домена: сломанные детские площадки
+
+domain_id: broken_playgrounds
+name: "Сломанные детские площадки"
+description: "Outdoor playgrounds with visible damage, wear, and safety hazards"
+
+# ---------------------------------------------------------------------------
+# Prompt Builder
+# ---------------------------------------------------------------------------
+prompt:
+  style: >
+    outdoor playground, residential courtyard, daylight,
+    visible damage and wear, realistic urban environment,
+    photorealistic, high quality, no people
+
+  scene_intro: "Photo of a damaged children's playground in a residential area"
+
+  negative: >
+    people, children, faces, human body parts,
+    indoor scene, office, warehouse, store interior,
+    NSFW, blurry, overexposed, underexposed,
+    watermark, text artifacts, extra limbs, warped objects,
+    pristine new equipment, amusement park
+
+  zone_descriptions:
+    slide_zone: "playground slide area with surrounding ground surface"
+    swing_zone: "swing set area with safety surfacing"
+    climbing_zone: "climbing frame or jungle gym structure"
+    sandbox: "sandbox or sand play area"
+    general_overview: "full playground overview from a distance"
+    bench_zone: "seating area near playground with benches"
+
+  camera_views:
+    front: "straight-on frontal view"
+    corner: "angled view showing depth and multiple elements"
+    wide: "wide-angle shot showing full playground"
+    close: "close-up detail of damage"
+    ground_level: "low angle from ground level"
+
+  reason_hints:
+    - triggers: ["damage", "broken", "crack"]
+      hint: "make damage clearly visible — cracks, rust, broken parts"
+    - triggers: ["playground", "equipment"]
+      hint: "standard residential playground equipment must be recognizable"
+    - triggers: ["blurry", "blur"]
+      hint: "sharp detailed image, no motion blur"
+    - triggers: ["outdoor", "environment"]
+      hint: "clearly outdoor residential courtyard, not a park or indoor"
+    - triggers: ["exposure", "dark", "bright"]
+      hint: "natural daylight, well-balanced exposure"
+
+# ---------------------------------------------------------------------------
+# Prompt Improver
+# ---------------------------------------------------------------------------
+improver:
+  system_prompt: >
+    You are an expert at writing image generation prompts for damaged and
+    worn playground photography in residential areas.
+    Your task: improve the given prompt based on audit failures.
+    Return ONLY the improved prompt text, nothing else. No explanations, no JSON.
+
+  rules: |
+    Rules for improvement:
+    1. Keep the overall scene description but fix the specific issues identified
+    2. If damage not visible: add specific damage types (rust, cracks, broken boards, peeling paint)
+    3. If domain relevance failed: start with 'Photorealistic outdoor playground in residential courtyard'
+    4. If technical quality failed: add 'sharp focus, natural daylight, high detail, no blur'
+    5. If object integration failed: describe the damaged element position and nature more explicitly
+    6. Keep prompt under 200 words
+    7. Always end with: 'No people, no children, photorealistic'
+    8. Do not add indoor scenes or pristine equipment
+
+# ---------------------------------------------------------------------------
+# Domain Relevance Check
+# ---------------------------------------------------------------------------
+relevance_check:
+  intro: "Evaluate whether this image shows a damaged/worn children's playground in a residential area."
+
+  questions:
+    - key: "playground_equipment_present"
+      label: "Playground equipment visible (slides, swings, climbing frames)"
+      weight: 0.30
+    - key: "visible_damage_or_wear"
+      label: "Visible damage, rust, cracks, or wear on equipment"
+      weight: 0.35
+    - key: "outdoor_residential_setting"
+      label: "Outdoor residential/courtyard setting"
+      weight: 0.20
+    - key: "no_forbidden_zone_type"
+      label: "Not a forbidden zone type"
+      weight: 0.15
+      extra: "1.0 means NOT indoor/store/office/amusement park. 0.0 means it IS a forbidden zone type."
+
+  low_score_findings:
+    playground_equipment_present: "no playground equipment visible"
+    visible_damage_or_wear: "equipment looks new/undamaged"
+    outdoor_residential_setting: "doesn't look like residential outdoor area"
+    no_forbidden_zone_type: "scene resembles forbidden zone type"
+
+# ---------------------------------------------------------------------------
+# Safety Check
+# ---------------------------------------------------------------------------
+safety:
+  brand_field: "no_commercial_brands"
+  brand_description: "are there visible commercial brand logos that could identify real locations?"
+
+# ---------------------------------------------------------------------------
+# Decision Engine — подсказки
+# ---------------------------------------------------------------------------
+suggestions:
+  domain_relevance:
+    - "Add specific playground equipment to prompt (slides, swings, climbing frames)"
+    - "Emphasize residential courtyard setting with apartment buildings"
+  technical_quality:
+    - "Request sharper, higher detail image in prompt"
+    - "Specify natural daylight with balanced exposure"
+  prompt_adherence:
+    - "Make damage types more explicit in prompt (rust, cracks, broken boards)"
+  object_integration:
+    - "Describe the damaged element position more precisely"
+    - "Specify the type and extent of damage more explicitly"
+
+# ---------------------------------------------------------------------------
+# Knowledge Base
+# ---------------------------------------------------------------------------
+knowledge_base:
+  markers_field: "damage_markers"
+  identity_field: "good_damage_visibility"
+  reference_label: "damaged playgrounds"

@@ -1,0 +1,140 @@
+# Domain Configuration — Wildberries ПВЗ
+# Все domain-специфичные строки, которые раньше были hardcoded в Python
+
+domain_id: wb_pvz
+name: "Wildberries ПВЗ"
+description: "Interiors of Wildberries pickup points (пункты выдачи заказов)"
+
+# ---------------------------------------------------------------------------
+# Prompt Builder — стиль, зоны, негативные промпты
+# ---------------------------------------------------------------------------
+prompt:
+  style: >
+    white walls, white retail furniture,
+    purple and magenta Wildberries brand accents,
+    bright LED overhead lighting, clean modern retail pickup point interior,
+    photorealistic, high quality, no people
+
+  scene_intro: "Interior photo of a Wildberries pickup point (ПВЗ)"
+
+  negative: >
+    people, faces, human body parts,
+    supermarket, outdoor scene, apartment, office, warehouse pallets,
+    competitor logos, NSFW, blurry, overexposed, underexposed,
+    watermark, text artifacts, extra limbs, warped objects
+
+  zone_descriptions:
+    counter: "delivery counter zone with white desk units"
+    fitting_room: "fitting room area with grey curtains"
+    brand_wall: "brand mural wall with Wildberries purple/magenta design"
+    storage: "storage area glimpse behind grey curtain"
+    general_overview: "full hall interior overview"
+    counter_plus_storage: "delivery counter with storage area visible behind curtain"
+    counter_plus_brand_wall: "delivery counter zone with prominent brand wall"
+    counter_plus_waiting: "delivery counter with waiting area"
+
+  camera_views:
+    front: "straight-on frontal view"
+    corner: "angled corner view showing depth"
+    wide: "wide-angle shot showing full room"
+    wide_angle: "wide-angle shot showing full room"
+    wide_front: "wide-angle frontal view"
+    wide_side: "wide-angle side view"
+    front_close: "close-up frontal detail shot"
+    close: "close-up detail shot"
+
+  # Конвертация причин reject → подсказки для следующего промпта
+  reason_hints:
+    - triggers: ["brand", "branding", "wb_brand", "wildberries"]
+      hint: "make Wildberries purple/magenta mural or logo highly visible"
+    - triggers: ["blurry", "blur"]
+      hint: "sharp detailed image, no motion blur"
+    - triggers: ["white_furniture", "counter"]
+      hint: "prominent white retail desk/counter in foreground"
+    - triggers: ["object", "placement"]
+      hint: "the added object must be clearly visible and naturally integrated"
+    - triggers: ["indoor", "retail"]
+      hint: "clearly indoor retail space, not a warehouse or apartment"
+    - triggers: ["exposure", "dark", "bright"]
+      hint: "well-balanced exposure, bright natural retail lighting"
+
+# ---------------------------------------------------------------------------
+# Prompt Improver — системный промпт и правила для LLM Fix-шага
+# ---------------------------------------------------------------------------
+improver:
+  system_prompt: >
+    You are an expert at writing image generation prompts for Wildberries (WB)
+    pickup point interior photography.
+    Your task: improve the given prompt based on audit failures.
+    Return ONLY the improved prompt text, nothing else. No explanations, no JSON.
+
+  rules: |
+    Rules for improvement:
+    1. Keep the overall scene description but fix the specific issues identified
+    2. If branding failed: add 'prominent Wildberries purple/magenta mural with -30% symbol and WB logo'
+    3. If domain relevance failed: start with 'Photorealistic interior of a Wildberries (WB) parcel pickup point'
+    4. If technical quality failed: add 'sharp focus, professional LED lighting, high detail, no blur'
+    5. If object integration failed: describe the object's exact position and size more explicitly
+    6. If exposure failed: add 'well-lit, balanced exposure, bright overhead lighting'
+    7. Keep prompt under 200 words
+    8. Always end with: 'No people, no faces, photorealistic'
+    9. Do not add competitor brands or NSFW content
+
+# ---------------------------------------------------------------------------
+# Domain Relevance Check — вопросы для VLM-аудита
+# ---------------------------------------------------------------------------
+relevance_check:
+  intro: "Evaluate whether this image looks like a Wildberries (WB) pickup point interior."
+
+  questions:
+    - key: "wb_brand_element_present"
+      label: "WB branding elements visible (murals, posters, logos)"
+      weight: 0.35
+    - key: "white_furniture_present"
+      label: "White retail furniture visible (counters, desks)"
+      weight: 0.20
+    - key: "indoor_retail_aesthetic"
+      label: "Indoor retail space aesthetic"
+      weight: 0.25
+    - key: "no_forbidden_zone_type"
+      label: "Not a forbidden zone type"
+      weight: 0.20
+      extra: "1.0 means the scene is NOT a supermarket/office/apartment/outdoor. 0.0 means it IS a forbidden zone type."
+
+  # Findings при низких скорах
+  low_score_findings:
+    wb_brand_element_present: "no WB branding visible"
+    white_furniture_present: "no white retail furniture visible"
+    indoor_retail_aesthetic: "doesn't look like a pickup point"
+    no_forbidden_zone_type: "scene resembles forbidden zone type"
+
+# ---------------------------------------------------------------------------
+# Safety Check — доменная добавка
+# ---------------------------------------------------------------------------
+safety:
+  brand_field: "no_foreign_brands"
+  brand_description: "are there competitor or non-WB brand logos?"
+
+# ---------------------------------------------------------------------------
+# Decision Engine — подсказки при низких скорах
+# ---------------------------------------------------------------------------
+suggestions:
+  domain_relevance:
+    - "Add explicit WB mural or rollup poster to prompt"
+    - "Emphasize white retail counter furniture in scene description"
+  technical_quality:
+    - "Request sharper, higher detail image in prompt"
+    - "Specify well-lit interior with bright LED lighting"
+  prompt_adherence:
+    - "Make must-have scene elements more explicit in prompt"
+  object_integration:
+    - "Describe the added object placement more precisely"
+    - "Specify object scale relative to surrounding furniture"
+
+# ---------------------------------------------------------------------------
+# Knowledge Base — настройки
+# ---------------------------------------------------------------------------
+knowledge_base:
+  markers_field: "wb_markers"
+  identity_field: "good_wb_identity"
+  reference_label: "Wildberries pickup points"

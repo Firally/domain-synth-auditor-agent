@@ -1,0 +1,179 @@
+# Golden Set — эталонный набор для оценки аудит-системы
+#
+# Источник изображений: реальные фотографии WB ПВЗ из папки /images/
+# Человеческие метки (human_label) расставлены вручную на основе
+# визуального осмотра и аннотаций из reference_annotations.yaml
+#
+# Поля:
+#   id              — уникальный ID кейса
+#   description     — краткое описание
+#   image_path      — путь к изображению относительно корня проекта
+#   scene_id        — ближайшая каноническая сцена из scene_catalog
+#   object_id       — добавленный объект (null если нет)
+#   expected_verdict — ожидаемое решение: ACCEPT / REJECT / NEEDS_REVIEW
+#   expected_checks — какие checks должны PASS / FAIL (для детальной проверки)
+#   human_label     — метка человека (совпадает с expected_verdict для консистентности)
+#   human_notes     — обоснование решения
+
+eval_cases:
+
+  # -------------------------------------------------------------------------
+  # ACCEPT кейсы — качественные изображения с хорошим WB-брендингом
+  # -------------------------------------------------------------------------
+
+  - id: eval_001
+    description: "Counter close-up с WB rollup poster, ножницы на столе, 5/5"
+    image_path: "images/88e890fe-1969-4c07-b89b-9363de389df7.jpg"
+    scene_id: scene_01_counter_front
+    object_id: null
+    expected_verdict: ACCEPT
+    expected_checks:
+      safety_pii: pass
+      domain_relevance: pass
+      technical_quality: pass
+    human_label: ACCEPT
+    human_notes: "Чистая сцена. WB rollup poster хорошо виден, белый стол, нет людей. Эталонное фото."
+
+  - id: eval_002
+    description: "Counter wide с двойными WB-муралами, склад за шторкой, 5/5"
+    image_path: "images/84c5f288-3e01-497b-a2e9-e029cb569025.jpg"
+    scene_id: scene_06_storage_glimpse
+    object_id: null
+    expected_verdict: ACCEPT
+    expected_checks:
+      safety_pii: pass
+      domain_relevance: pass
+      technical_quality: pass
+    human_label: ACCEPT
+    human_notes: "Двойной WB-мурал на обеих стенах. Склад за шторкой виден. Хороший брендинг."
+
+  - id: eval_003
+    description: "Примерочная — серые шторы, белые рамки, зеркало, WB мурал, 5/5"
+    image_path: "images/134c634d-97da-4df5-b7f4-692ed788cd52.jpg"
+    scene_id: scene_03_fitting_room_front
+    object_id: null
+    expected_verdict: ACCEPT
+    expected_checks:
+      safety_pii: pass
+      domain_relevance: pass
+      technical_quality: pass
+    human_label: ACCEPT
+    human_notes: "Идеальная примерочная: 3 кабины, серые шторы, зеркала, WB мурал сзади. Нет людей."
+
+  - id: eval_004
+    description: "Counter+waiting широкий план, WB rollup, окно, лавка, 5/5"
+    image_path: "images/9360bafd-42cc-455a-8cc9-f3143311d584.jpg"
+    scene_id: scene_05_general_wide
+    object_id: null
+    expected_verdict: ACCEPT
+    expected_checks:
+      safety_pii: pass
+      domain_relevance: pass
+      technical_quality: pass
+    human_label: ACCEPT
+    human_notes: "Светлая просторная сцена. WB rollup poster, окно с естественным светом, зона ожидания."
+
+  - id: eval_005
+    description: "Counter wide — WB мурал, стол выдачи, орхидея на стене, 5/5"
+    image_path: "images/32858040-dd4c-40c1-b6fb-6b2ed1a88bb6.jpg"
+    scene_id: scene_01_counter_front
+    object_id: null
+    expected_verdict: ACCEPT
+    expected_checks:
+      safety_pii: pass
+      domain_relevance: pass
+      technical_quality: pass
+    human_label: ACCEPT
+    human_notes: "Чистый ПВЗ, хороший WB мурал с -30% и шарами. Белый стол. Нет людей."
+
+  - id: eval_006
+    description: "General wide — WB poster, пальма, окно, стол, 5/5"
+    image_path: "images/5e1ddba6-529f-47d0-8e72-c5b15fb3cb71.jpg"
+    scene_id: scene_05_general_wide
+    object_id: null
+    expected_verdict: ACCEPT
+    expected_checks:
+      safety_pii: pass
+      domain_relevance: pass
+      technical_quality: pass
+    human_label: ACCEPT
+    human_notes: "Просторный зал, хорошее освещение. WB постер на стене, большое растение, нет людей."
+
+  - id: eval_007
+    description: "Counter+brand wall — WB мурал, зеркало, сумка WB, 4/5"
+    image_path: "images/63505c31-48bb-425a-8391-9e305237871c.jpg"
+    scene_id: scene_04_brand_wall_wide
+    object_id: null
+    expected_verdict: ACCEPT
+    expected_checks:
+      safety_pii: pass
+      domain_relevance: pass
+    human_label: ACCEPT
+    human_notes: "Большой WB мурал занимает всю стену. Зеркало на стойке, WB сумка. Слегка беспорядок (коробки)."
+
+  - id: eval_008
+    description: "Counter+storage front — WB мурал, ТВ, склад, лаванда, 4/5"
+    image_path: "images/6abffa03-ec6e-4652-af4a-ba11775c7c63.jpg"
+    scene_id: scene_06_storage_glimpse
+    object_id: null
+    expected_verdict: ACCEPT
+    expected_checks:
+      safety_pii: pass
+      domain_relevance: pass
+    human_label: ACCEPT
+    human_notes: "WB мурал на полную стену (фиолетовый). Склад за шторкой виден. ТВ-монитор. Слегка беспорядок."
+
+  - id: eval_009
+    description: "General wide — WB мурал, стол, новогодние наклейки, 4/5"
+    image_path: "images/8fb6c8a8-b680-40dd-8c15-90c14f6508d3.jpg"
+    scene_id: scene_05_general_wide
+    object_id: null
+    expected_verdict: ACCEPT
+    expected_checks:
+      safety_pii: pass
+      domain_relevance: pass
+    human_label: ACCEPT
+    human_notes: "WB мурал чётко виден. Белые столы. Новогодние наклейки. Нет людей."
+
+  - id: eval_010
+    description: "Counter corner — WB мурал угол, новогодний декор, 4/5"
+    image_path: "images/04a5c833-f8d5-4120-a13f-d537529f20ce.jpg"
+    scene_id: scene_02_counter_corner
+    object_id: null
+    expected_verdict: ACCEPT
+    expected_checks:
+      safety_pii: pass
+      domain_relevance: pass
+    human_label: ACCEPT
+    human_notes: "Угловой вид, два стола. WB мурал с % символом. Новогодний декор. Слегка беспорядок."
+
+  # -------------------------------------------------------------------------
+  # REJECT кейс — человек в кадре, посторонние объекты
+  # -------------------------------------------------------------------------
+
+  - id: eval_011
+    description: "REJECT: человек в кадре + шины на полу — нарушение safety_pii"
+    image_path: "images/60202efb-fe34-4512-977f-4e6274673e0d.jpg"
+    scene_id: scene_05_general_wide
+    object_id: null
+    expected_verdict: REJECT
+    expected_checks:
+      safety_pii: fail        # человек в кадре → hard reject
+    human_label: REJECT
+    human_notes: "Явное нарушение: человек виден в кадре. Шины на полу — посторонний объект. Немедленный REJECT."
+
+  # -------------------------------------------------------------------------
+  # NEEDS_REVIEW кейс — слабый WB-брендинг, пограничное качество
+  # -------------------------------------------------------------------------
+
+  - id: eval_012
+    description: "NEEDS_REVIEW: примерочная с минимальным WB-брендингом, 3/5"
+    image_path: "images/14e5e4fc-d901-48c6-82e4-6cf132395aab.jpg"
+    scene_id: scene_03_fitting_room_front
+    object_id: null
+    expected_verdict: NEEDS_REVIEW
+    expected_checks:
+      safety_pii: pass
+      domain_relevance: fail  # weak WB identity → низкий скор
+    human_label: NEEDS_REVIEW
+    human_notes: "Примерочные видны, но WB-брендинга почти нет (только маленький элемент вверху справа). Пограничный случай."

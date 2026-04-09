@@ -1,0 +1,114 @@
+# Domain Configuration — TV Settings Screen Replacement
+# Замена рекламного контента на экранах ТВ в ПВЗ на экран настроек
+
+domain_id: tv_settings
+name: "TV Settings Screen Replacement"
+description: "Edit photos of TVs in WB pickup points to replace ads/video with settings menu"
+
+# Режим пайплайна: edit (редактирование существующих изображений)
+pipeline_mode: edit
+
+# Дефолтная инструкция для image editing
+edit_instruction: >
+  Look at the TV screen in this photo. Replace whatever is currently displayed
+  on the TV screen (advertisement, video content, screensaver, or any other content)
+  with a typical TV settings menu interface. The settings menu should have a dark
+  background and show common TV settings options like Picture, Sound, Network,
+  System, and General settings with icons. The menu should match the perspective
+  and angle of the TV screen. Keep everything else in the photo completely unchanged
+  — the wall, TV frame, cables, and surrounding objects must stay exactly as they are.
+
+# ---------------------------------------------------------------------------
+# Prompt — не используется в edit mode напрямую, но нужен для совместимости
+# ---------------------------------------------------------------------------
+prompt:
+  style: ""
+  scene_intro: ""
+  negative: ""
+  zone_descriptions:
+    tv_screen: "TV screen area"
+  camera_views:
+    front: "frontal view of TV"
+
+  reason_hints:
+    - triggers: ["ad", "advertisement", "рекламa", "promo"]
+      hint: "remove ALL advertisement content from the TV screen, show only a settings menu"
+    - triggers: ["settings", "menu"]
+      hint: "make the settings menu more prominent and realistic with clear text labels"
+    - triggers: ["perspective", "angle", "distort"]
+      hint: "match the exact perspective and angle of the TV screen in the original photo"
+    - triggers: ["unchanged", "background", "surroundings"]
+      hint: "keep everything outside the TV screen completely unchanged"
+
+# ---------------------------------------------------------------------------
+# Prompt Improver — для DVF Fix-шага
+# ---------------------------------------------------------------------------
+improver:
+  system_prompt: >
+    You are an expert at writing image editing instructions for AI image models.
+    Your task: improve the editing instruction so that the TV screen shows a
+    realistic settings menu instead of an advertisement.
+    Return ONLY the improved instruction text, nothing else.
+
+  rules: |
+    Rules for improving the editing instruction:
+    1. The TV screen MUST show a settings menu, NOT an advertisement or video
+    2. If ad content is still visible: be more explicit about removing ALL ad content
+    3. If the perspective is wrong: specify "match the exact angle and perspective of the TV screen"
+    4. If the rest of the image changed: emphasize "keep everything outside the TV screen unchanged"
+    5. The settings menu should look like a real TV settings interface (Samsung, LG, Sony style)
+    6. Include dark background, icons, and text labels for settings categories
+    7. Keep instruction under 150 words
+
+# ---------------------------------------------------------------------------
+# Domain Relevance Check — вопросы для VLM-аудита
+# ---------------------------------------------------------------------------
+relevance_check:
+  intro: >
+    Evaluate whether the TV in this image shows a settings/configuration menu
+    (not an advertisement, video, or other content).
+
+  questions:
+    - key: "shows_settings_menu"
+      label: "TV displays a settings or configuration menu interface"
+      weight: 0.40
+      extra: "1.0 = clearly a settings menu with options like Picture/Sound/Network. 0.0 = no settings menu visible."
+    - key: "no_ad_content"
+      label: "No advertisement, promotional, or video content on the TV screen"
+      weight: 0.30
+      extra: "1.0 = no ads or promotional material visible on screen. 0.0 = screen shows advertisement."
+    - key: "rest_of_image_unchanged"
+      label: "Rest of the image (wall, TV frame, surroundings) looks natural and unchanged"
+      weight: 0.30
+      extra: "1.0 = everything outside the TV screen looks natural. 0.0 = visible artifacts or changes outside TV area."
+
+  low_score_findings:
+    shows_settings_menu: "TV does not show a settings/configuration menu"
+    no_ad_content: "TV screen still shows advertisement or promotional content"
+    rest_of_image_unchanged: "image was modified beyond just the TV screen content"
+
+# ---------------------------------------------------------------------------
+# Safety Check
+# ---------------------------------------------------------------------------
+safety:
+  brand_field: "no_inappropriate_content"
+  brand_description: "is there inappropriate, offensive, or NSFW content visible on the screen?"
+
+# ---------------------------------------------------------------------------
+# Decision Engine — подсказки
+# ---------------------------------------------------------------------------
+suggestions:
+  domain_relevance:
+    - "Be more explicit: 'Replace screen content with a TV settings menu showing Picture, Sound, Network options'"
+    - "Add: 'dark background, white/grey text, settings icons'"
+  technical_quality:
+    - "Add: 'high quality, sharp text on screen, realistic perspective'"
+    - "Specify: 'well-lit, matching the original photo lighting'"
+
+# ---------------------------------------------------------------------------
+# Knowledge Base — настройки (минимальные для edit mode)
+# ---------------------------------------------------------------------------
+knowledge_base:
+  markers_field: "screen_content"
+  identity_field: "shows_settings"
+  reference_label: "TV settings screens"

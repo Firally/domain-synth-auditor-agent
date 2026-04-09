@@ -1,0 +1,275 @@
+# Reference Image Annotations — WB ПВЗ Domain
+# Annotated by VLM analysis on 2026-03-18
+# Format: zone, camera_view, wb_markers, must_have_elements, optional_elements, ceiling_type, floor_type, audit_notes
+
+references:
+  - file: 04a5c833-f8d5-4120-a13f-d537529f20ce.jpg
+    zone: counter
+    camera_view: corner
+    wb_markers:
+      - large_purple_mural_percent_symbol
+      - wb_branded_bag_on_door
+      - wb_branded_mat_on_counter
+      - info_signs_on_wall
+    must_have_elements:
+      - white_counter_desk (two units)
+      - wb_brand_wall_mural (purple + pink, % symbol)
+      - fluorescent_strip_lighting
+    optional_elements:
+      - christmas_decorations_on_counter
+      - stickers_on_counter_surface
+      - cardboard_boxes_visible
+      - cctv_camera
+    ceiling_type: drop_tile  # белая плитка подвесного потолка
+    floor_type: dark_laminate
+    audit_notes:
+      - good_wb_identity: true
+      - people_visible: false
+      - messy_scene: slightly (boxes, handwritten note on furniture)
+      - quality_rating: 4/5
+
+  - file: 134c634d-97da-4df5-b7f4-692ed788cd52.jpg
+    zone: fitting_room
+    camera_view: front
+    wb_markers:
+      - wb_brand_wall_mural (purple, -30%, spheres)
+      - pink_pompom_ceiling_decor
+    must_have_elements:
+      - fitting_room_stalls (white MDF frame, grey curtains)
+      - mirror_inside_stall
+      - bench_inside_stall (grey upholstered)
+    optional_elements:
+      - decorative_flower_garland_over_frame
+      - cardboard_box_on_floor
+    ceiling_type: open_metal_grid  # решётчатый подвесной потолок
+    floor_type: light_grey_tile
+    audit_notes:
+      - good_wb_identity: true
+      - people_visible: false
+      - messy_scene: false
+      - quality_rating: 5/5
+
+  - file: 14e5e4fc-d901-48c6-82e4-6cf132395aab.jpg
+    zone: fitting_room
+    camera_view: front
+    wb_markers:
+      - wb_brand_element_top_right (small, partially visible)
+    must_have_elements:
+      - fitting_room_stalls_x3 (white MDF frame, grey curtains)
+      - white_wooden_bench_inside_stall
+      - entrance_door_visible
+    optional_elements:
+      - purple_mat_inside_stall
+    ceiling_type: flat_white  # обычный белый потолок с точечным освещением
+    floor_type: light_wood_look_tile
+    audit_notes:
+      - good_wb_identity: weak (little branding visible)
+      - people_visible: false
+      - messy_scene: false
+      - quality_rating: 3/5  # маловато брендинга
+
+  - file: 32858040-dd4c-40c1-b6fb-6b2ed1a88bb6.jpg
+    zone: counter
+    camera_view: wide
+    wb_markers:
+      - large_wb_mural (purple background, -30%, spheres)
+      - info_instruction_poster_on_wall
+      - cctv_camera
+    must_have_elements:
+      - white_counter_units (two desks)
+      - wb_brand_wall_mural
+      - fluorescent_strip_lighting
+    optional_elements:
+      - orchid_plant_on_wall
+      - electrical_panel_on_wall
+      - qr_sticker_on_wall
+      - lavender_plant_on_counter
+      - entrance_door_with_dark_curtain
+    ceiling_type: flat_white
+    floor_type: light_wood_look_tile
+    audit_notes:
+      - good_wb_identity: true
+      - people_visible: false
+      - messy_scene: false
+      - quality_rating: 5/5  # чистая, хорошо освещённая сцена
+
+  - file: 5e1ddba6-529f-47d0-8e72-c5b15fb3cb71.jpg
+    zone: general_overview
+    camera_view: wide_angle
+    wb_markers:
+      - wb_poster_on_wall (pink/purple, "wb" logo)
+      - pompom_ceiling_decor (pink, purple, white)
+      - exit_sign
+    must_have_elements:
+      - order_counter_in_foreground
+      - waiting_bench_area
+      - window_with_natural_light
+    optional_elements:
+      - large_indoor_plant (palm-like)
+      - small_plants_on_windowsill
+      - decorative_window_garland
+      - kiosk_terminal_right_edge
+    ceiling_type: open_metal_grid
+    floor_type: light_grey_tile
+    audit_notes:
+      - good_wb_identity: true
+      - people_visible: false
+      - messy_scene: false
+      - quality_rating: 5/5  # светлая, просторная сцена с хорошим обзором
+
+  - file: 60202efb-fe34-4512-977f-4e6274673e0d.jpg
+    zone: general_overview
+    camera_view: wide
+    wb_markers:
+      - wb_brand_walls_x2 (purple mural)
+      - wb_poster_on_wall
+      - white_counters_with_stickers
+    must_have_elements:
+      - wb_brand_mural
+      - white_counter_units
+    optional_elements:
+      - pink_ottoman_seat
+      - christmas_decorations_on_counter
+    ceiling_type: flat_white
+    floor_type: beige_large_tile
+    audit_notes:
+      - good_wb_identity: true
+      - people_visible: true  # REJECT FLAG: человек в кадре
+      - messy_scene: true  # шины на полу — нерелевантный объект
+      - quality_rating: 2/5  # человек + посторонние объекты (шины)
+
+  - file: 63505c31-48bb-425a-8391-9e305237871c.jpg
+    zone: counter_plus_brand_wall
+    camera_view: wide
+    wb_markers:
+      - large_wb_mural (purple, -30%, spheres, big)
+      - wb_branded_bag_on_counter
+    must_have_elements:
+      - white_counter_unit
+      - large_wb_brand_mural
+      - full_length_mirror_on_stand
+    optional_elements:
+      - fitting_room_zone_visible_through_doorway
+      - cardboard_boxes_on_floor
+    ceiling_type: flat_white  # с подвесными линейными светильниками
+    floor_type: dark_grey_tile
+    audit_notes:
+      - good_wb_identity: true
+      - people_visible: false
+      - messy_scene: slightly (boxes on floor)
+      - quality_rating: 4/5
+
+  - file: 6abffa03-ec6e-4652-af4a-ba11775c7c63.jpg
+    zone: counter_plus_storage
+    camera_view: front
+    wb_markers:
+      - large_wb_brand_mural (purple background, full wall)
+      - tv_monitor_on_wall
+      - lavender_plant_on_counter
+    must_have_elements:
+      - white_counter_units
+      - wb_brand_wall (purple)
+      - storage_zone_visible (shelving with packages behind dark curtain)
+    optional_elements:
+      - tv_monitor
+      - wb_branded_vest_hanging
+      - christmas_decorations
+    ceiling_type: open_metal_grid
+    floor_type: light_grey_tile
+    audit_notes:
+      - good_wb_identity: true
+      - people_visible: false
+      - storage_zone_visible: true  # склад за шторкой виден — полезный элемент
+      - messy_scene: slightly
+      - quality_rating: 4/5
+
+  - file: 84c5f288-3e01-497b-a2e9-e029cb569025.jpg
+    zone: counter_plus_storage
+    camera_view: wide_front
+    wb_markers:
+      - wb_brand_murals_x2 (large, both walls, purple)
+      - christmas_tree
+    must_have_elements:
+      - wb_brand_murals (double, prominent)
+      - white_counter_unit
+      - storage_zone_visible (metal shelving with packages, dark curtain)
+    optional_elements:
+      - lavender_plant_on_counter
+      - tv_monitor
+      - christmas_tree
+    ceiling_type: open_metal_grid
+    floor_type: light_grey_tile
+    audit_notes:
+      - good_wb_identity: true
+      - people_visible: false
+      - storage_zone_visible: true
+      - messy_scene: false
+      - quality_rating: 5/5  # отличный двойной брендинг
+
+  - file: 88e890fe-1969-4c07-b89b-9363de389df7.jpg
+    zone: counter
+    camera_view: front_close
+    wb_markers:
+      - wb_poster_rollup (pink/purple, "wb" logo, large)
+      - info_instruction_sheet_on_wall
+    must_have_elements:
+      - wb_rollup_poster
+      - white_delivery_desk (two units)
+      - scissors_on_desk (рабочий инструмент)
+    optional_elements:
+      - orchid_plant_on_electrical_panel
+      - electrical_panel_on_wall
+      - cardboard_box_under_desk
+    ceiling_type: flat_white  # с трековым освещением
+    floor_type: dark_floor  # тёмный пол, небольшое помещение
+    audit_notes:
+      - good_wb_identity: true
+      - people_visible: false
+      - messy_scene: false
+      - quality_rating: 5/5  # чисто, хорошо видны все элементы
+
+  - file: 8fb6c8a8-b680-40dd-8c15-90c14f6508d3.jpg
+    zone: general_overview
+    camera_view: wide_front
+    wb_markers:
+      - wb_brand_mural (purple, % symbol)
+      - black_entrance_mat
+    must_have_elements:
+      - white_counter_units
+      - wb_brand_mural
+      - entrance_mat (black rubber)
+    optional_elements:
+      - stickers_on_counter (christmas WB characters)
+      - fitting_room_curtain_visible_right
+      - wb_branded_bag_on_floor_left
+    ceiling_type: flat_white
+    floor_type: beige_large_tile
+    audit_notes:
+      - good_wb_identity: true
+      - people_visible: false
+      - messy_scene: false
+      - quality_rating: 4/5
+
+  - file: 9360bafd-42cc-455a-8cc9-f3143311d584.jpg
+    zone: counter_plus_waiting
+    camera_view: wide_side
+    wb_markers:
+      - wb_rollup_poster (pink/purple, "wb" logo)
+      - pompom_ceiling_decor (purple, pink)
+    must_have_elements:
+      - wb_rollup_poster
+      - white_delivery_desk
+      - waiting_bench_area
+      - window_with_natural_light
+    optional_elements:
+      - air_conditioner_on_wall
+      - large_indoor_plant (palm-like)
+      - small_plants_on_windowsill
+      - decorative_window_garland
+    ceiling_type: open_metal_grid
+    floor_type: light_grey_tile
+    audit_notes:
+      - good_wb_identity: true
+      - people_visible: false
+      - messy_scene: false
+      - quality_rating: 5/5  # светлая, уютная сцена
